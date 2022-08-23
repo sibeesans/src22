@@ -169,10 +169,10 @@ PERMISSION
 if [ -f /home/needupdate ]; then
 red "Proses Script Update!!!"
 exit 0
-elif [ "$res" = "Perizininan Diberikan..." ]; then
-green "Perizinan Diberikan!"
+elif [ "$res" = "Perizinan Diberikan..." ]; then
+green "Perizinan Diberikan..."
 else
-red "Perizinan Ditolak!"
+red "Perizinan Ditolak..."
 rm setup.sh > /dev/null 2>&1
 sleep 10
 exit 0
