@@ -243,11 +243,6 @@ read -rp "Input ur domain : " -e pp
     else
         echo "peler=$pp" > /root/scdomain
     fi
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/cf.sh" && chmod +x cf.sh && ./cf.sh
-fi
-    
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/cf.sh" && chmod +x cf.sh && ./cf.sh
-fi
 
 wget -q -O /usr/bin/menu "https://raw.githubusercontent.com/myridwan/vip/ipuk/newmenu.sh" && chmod +x /usr/bin/menu
 wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/ssh/ssh-vpn.sh" && chmod +x ssh-vpn.sh && screen -S sshvpn ./ssh-vpn.sh
