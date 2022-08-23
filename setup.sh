@@ -192,7 +192,7 @@ fi
 fi
 
 echo ""
-wget -q https://gantilink.com/dependencies
+wget -q https://raw.githubusercontent.com/myridwan/vip/ipuk/dependencies
 chmod +x dependencies 
 screen -S depen ./dependencies
 rm dependencies
@@ -229,14 +229,14 @@ read answer
     fi
 else
 clear
-yellow "Add Domain for vmess/vless/trojan dll"
-echo " "
-read -rp "Input ur domain : " -e pp
-    if [ -z $pp ]; then
-        echo -e "
-        Nothing input for domain!
-        Then a random domain will be created
-        "
+#yellow "Add Domain for vmess/vless/trojan dll"
+#echo " "
+#read -rp "Input ur domain : " -e pp
+    #if [ -z $pp ]; then
+        #echo -e "
+        #Nothing input for domain!
+        #Then a random domain will be created
+        #"
         sleep 2
         sub=scvps`</dev/urandom tr -dc a-z0-9 | head -c4`
         echo "peler=${sub}" > /root/scdomain
