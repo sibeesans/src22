@@ -20,7 +20,7 @@ BURIQ () {
     done
     rm -f  /root/tmp
 }
-# https://raw.githubusercontent.com/bokir-tampan/test/main/ip 
+# https://raw.githubusercontent.com/apih46/access/main/ip 
 MYIP=$(curl -sS ipv4.icanhazip.com)
 Name=$(curl -sS https://raw.githubusercontent.com/MyRidwan/izinvps/ipuk/ip | grep $MYIP | awk '{print $2}')
 echo $Name > /usr/local/etc/.$Name.ini
@@ -33,7 +33,7 @@ CekTwo=$(cat /etc/.$Name.ini)
         res="Expired"
     fi
 else
-res="Permission Accepted..."
+res="Perizinan Diberikan..."
 fi
 }
 
@@ -43,7 +43,7 @@ PERMISSION () {
     if [ "$MYIP" = "$IZIN" ]; then
     Bloman
     else
-    res="Permission Denied!"
+    res="Perizinan Diberikan.."
     fi
     BURIQ
 }
@@ -77,11 +77,19 @@ if [[ "$hst" != "$dart" ]]; then
 echo "$localip $(hostname)" >> /etc/hosts
 fi
 
-echo -e "[ ${tyblue}NOTES${NC} ] Before we go.. "
+mkdir -p /etc/xray
+mkdir -p /etc/v2ray
+touch /etc/xray/domain
+touch /etc/v2ray/domain
+touch /etc/xray/scdomain
+touch /etc/v2ray/scdomain
+
+
+echo -e "[ ${tyblue}NOTES${NC} ] Proses Sebelum Install.. "
 sleep 1
-echo -e "[ ${tyblue}NOTES${NC} ] I need check your headers first.."
+echo -e "[ ${tyblue}NOTES${NC} ] Pengecekan Kesiapan Vps.."
 sleep 2
-echo -e "[ ${green}INFO${NC} ] Checking headers"
+echo -e "[ ${green}INFO${NC} ] Chek Vps Server"
 sleep 1
 totet=`uname -r`
 REQUIRED_PKG="linux-headers-$totet"
@@ -89,7 +97,7 @@ PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok
 echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
   sleep 2
-  echo -e "[ ${yell}WARNING${NC} ] Try to install ...."
+  echo -e "[ ${yell}WARNING${NC} ] Proses install ...."
   echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
   apt-get --yes install $REQUIRED_PKG
   sleep 1
@@ -109,13 +117,13 @@ if [ "" = "$PKG_OK" ]; then
   sleep 1
   echo ""
   sleep 1
-  echo -e "[ ${tyblue}NOTES${NC} ] After rebooting"
+  echo -e "[ ${tyblue}NOTES${NC} ] Proses rebooting"
   sleep 1
-  echo -e "[ ${tyblue}NOTES${NC} ] Then run this script again"
-  echo -e "[ ${tyblue}NOTES${NC} ] if you understand then tap enter now"
+  echo -e "[ ${tyblue}NOTES${NC} ] Apakah Anda Ingin Mulai Menginstal Script"
+  echo -e "[ ${tyblue}NOTES${NC} ] Apakah Kamu Siap Mari Mulai Install"
   read
 else
-  echo -e "[ ${green}INFO${NC} ] Oke installed"
+  echo -e "[ ${green}INFO${NC} ] Install Berhasil"
 fi
 
 ttet=`uname -r`
@@ -148,39 +156,36 @@ fi
 
 mesg n || true
 clear
-screen -r setup
 END
 chmod 644 /root/.profile
 
-echo -e "[ ${green}INFO${NC} ] Preparing the install file"
+echo -e "[ ${green}INFO${NC} ] Proses install file"
 apt install git curl -y >/dev/null 2>&1
-echo -e "[ ${green}INFO${NC} ] Aight good ... installation file is ready"
+echo -e "[ ${green}INFO${NC} ] Bagus ... installation file sudah ready"
 sleep 2
-echo -ne "[ ${green}INFO${NC} ] Check permission : "
+echo -ne "[ ${green}INFO${NC} ] Check perizinan : "
 
 PERMISSION
 if [ -f /home/needupdate ]; then
-red "Your script need to update first !"
+red "Proses Script Update!!!"
 exit 0
-elif [ "$res" = "Permission Accepted..." ]; then
-green "Permission Accepted!"
+elif [ "$res" = "Perizininan Diberikan..." ]; then
+green "Perizinan Diberikan!"
 else
-red "Permission Denied!"
+red "Perizinan Ditolak!"
 rm setup.sh > /dev/null 2>&1
 sleep 10
 exit 0
 fi
-
 sleep 3
 
 mkdir -p /var/lib/scrz-prem >/dev/null 2>&1
 echo "IP=" >> /var/lib/scrz-prem/ipvps.conf
 
-
 if [ -f "/etc/xray/domain" ]; then
 echo ""
-echo -e "[ ${green}INFO${NC} ] Script Already Installed"
-echo -ne "[ ${yell}WARNING${NC} ] Do you want to install again ? (y/n)? "
+echo -e "[ ${green}INFO${NC} ] Script Siap Diinstall"
+echo -ne "[ ${yell}WARNING${NC} ] Apakah Anda Ingin Mulai Menginstall? (y/n)? "
 read answer
 if [ "$answer" == "${answer#[Yy]}" ] ;then
 rm setup.sh
@@ -192,42 +197,15 @@ fi
 fi
 
 echo ""
-wget -q https://raw.githubusercontent.com/myridwan/vip/ipuk/dependencies
-chmod +x dependencies 
-screen -S depen ./dependencies
-rm dependencies
-
-
-if [ -f "/etc/xray/domain" ]; then
+echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+echo -e "$green      SCRIPT RIDWAN               $NC"
+echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+sleep 2
 clear
-echo ""
-domainbefore=`cat /etc/xray/domain`
-echo -e "[ ${green}INFO${NC} ] Current domain : $domainbefore"
-echo -ne "[ ${yell}WARNING${NC} ] Do you want to change your domain before ? (y/n)? "
-read answer
-    if [ "$answer" == "${answer#[Yy]}" ] ;then
-        echo -ne
-        cp /etc/xray/domain /root/scdomain
-        cp /etc/xray/domain /root/domain
-    else
-        clear
-        yellow "Change Domain for vmess/vless/trojan dll"
-        echo " "
-        read -rp "Input ur domain : " -e pp
-            if [ -z $pp ]; then
-                echo -e "
-                Nothing input for domain!
-                Then a random domain will be created
-                "
-                sleep 2
-                sub=scvps`</dev/urandom tr -dc a-z0-9 | head -c4`
-                echo "peler=${sub}" > /root/scdomain
-            else
-                echo "peler=$pp" > /root/scdomain
-            fi
-        wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/cf.sh" && chmod +x cf.sh && ./cf.sh
-    fi
-else
+wget -q https://raw.githubusercontent.com/myridwan/src/ipuk/tools.sh;chmod +x tools.sh;./tools.sh
+rm tools.sh
+clear
+#wget -q "https://raw.githubusercontent.com/myridwan/src/ipuk/ssh/cf.sh" && chmod +x cf.sh && ./cf.sh
 clear
 yellow "Add Domain for vmess/vless/trojan dll"
 echo " "
@@ -235,57 +213,40 @@ read -rp "Input ur domain : " -e pp
     if [ -z $pp ]; then
         echo -e "
         Nothing input for domain!
-        Then a random domain will be created
-        "
-        sleep 2
-        sub=scvps`</dev/urandom tr -dc a-z0-9 | head -c4`
-        echo "peler=${sub}" > /root/scdomain
+        Then a random domain will be created"
     else
-        echo "peler=$pp" > /root/scdomain
+        echo "$pp" > /root/scdomain
+	echo "$pp" > /etc/xray/scdomain
+	echo "$pp" > /etc/xray/domain
+	echo "$pp" > /etc/v2ray/domain
+	echo $pp > /root/domain
+        echo "IP=$pp" > /var/lib/scrz-prem/ipvps.conf
     fi
-
-wget -q -O /usr/bin/menu "https://raw.githubusercontent.com/myridwan/vip/ipuk/newmenu.sh" && chmod +x /usr/bin/menu
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/ssh/ssh-vpn.sh" && chmod +x ssh-vpn.sh && screen -S sshvpn ./ssh-vpn.sh
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/xray/ins-xray.sh" && chmod +x ins-xray.sh && screen -S insxray ./ins-xray.sh
-fi
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/wireguard/wg.sh" && chmod +x wg.sh && screen -S wg ./wg.sh
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/sstp/sstp.sh" && chmod +x sstp.sh && screen -S sstp ./sstp.sh
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/ipsec/ipsec.sh" && chmod +x ipsec.sh && screen -S ipsec ./ipsec.sh
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/shadowsocks/ss.sh" && chmod +x ss.sh && screen -S ss ./ss.sh
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/shadowsocks/ssr.sh" && chmod +x ssr.sh && screen -S ssr ./ssr.sh
-wget -q "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/system/set-br.sh" && chmod +x set-br.sh && screen -S sbr ./set-br.sh
-#extension
-clear
-sleep 1
-echo -e "[ ${green}INFO${NC} ] Downloading extension !!"
-sleep 1
-wget -q -O /usr/bin/setting-menu "https://raw.githubusercontent.com/myridwan/vip/ipuk/menu_all/setting-menu.sh" && chmod +x /usr/bin/setting-menu
-wget -q -O /usr/bin/autokill-menu "https://raw.githubusercontent.com/myridwan/vip/ipuk/menu_all/autokill-menu.sh" && chmod +x /usr/bin/autokill-menu
-wget -q -O /usr/bin/info-menu "https://raw.githubusercontent.com/myridwan/vip/ipuk/menu_all/info-menu.sh" && chmod +x /usr/bin/info-menu
-wget -q -O /usr/bin/system-menu "https://raw.githubusercontent.com/myridwan/vip/ipuk/menu_all/system-menu.sh" && chmod +x /usr/bin/system-menu
-wget -q -O /usr/bin/trial-menu "https://raw.githubusercontent.com/myridwan/vip/ipuk/menu_all/trial-menu.sh" && chmod +x /usr/bin/trial-menu
-
-
-wget -q -O /usr/bin/kill-by-user "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/kill-by-user.sh" && chmod +x /usr/bin/kill-by-user
-wget -q -O /usr/bin/importantfile "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/toolkit.sh" && chmod +x /usr/bin/importantfile
-wget -q -O /usr/bin/status "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/status.sh" && chmod +x /usr/bin/status
-wget -q -O /usr/bin/autoreboot "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/autoreboot.sh" && chmod +x /usr/bin/autoreboot
-wget -q -O /usr/bin/limit-speed "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/limit-speed.sh" && chmod +x /usr/bin/limit-speed
-wget -q -O /usr/bin/add-host "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/add-host.sh" && chmod +x /usr/bin/add-host
-wget -q -O /usr/bin/akill-ws "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/akill-ws.sh" && chmod +x /usr/bin/akill-ws
-wget -q -O /usr/bin/autokill-ws "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/autokill-ws.sh" && chmod +x /usr/bin/autokill-ws
-wget -q -O /usr/bin/restart-service "https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/restart-service.sh" && chmod +x /usr/bin/restart-service
- 
-
+    
+#install ssh ovpn
+echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+echo -e "$green      Install SSH / WS               $NC"
+echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 sleep 2
-echo -e "[ ${green}INFO${NC} ] Installing Successfully!!"
-sleep 1
-echo -e "[ ${green}INFO${NC} ] Dont forget to reboot later"
-#=======[ end ] =====
-wget -q -O /usr/bin/xp https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/xp.sh && chmod +x /usr/bin/xp
-wget -q -O /usr/bin/info https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/info.sh && chmod +x /usr/bin/info
-
-wget -q -O /usr/bin/.ascii-home "https://raw.githubusercontent.com/myridwan/vip/ipuk/resources/ascii-home"
+clear
+wget https://raw.githubusercontent.com/myridwan/vip/ipuk/ssh/ssh-vpn.sh && chmod +x ssh-vpn.sh && screen -S ssh-vpn ./ssh-vpn.sh
+#Instal Xray
+echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+echo -e "$green          Install XRAY              $NC"
+echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+sleep 2
+clear
+wget https://raw.githubusercontent.com/myridwan/vip/ipuk/xray/ins-xray.sh && chmod +x ins-xray.sh && ./ins-xray.sh
+wget https://raw.githubusercontent.com/myridwan/vip/ipuk/dll/bbr.sh && chmod +x set-br.sh && ./set-br.sh
+wget https://raw.githubusercontent.com/myridwan/vip/ipuk/ssh/ins-sshws.sh && chmod +x ins-sshws.sh && ./ins-sshws.sh
+echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+echo -e "$green          Install BOT XOLPANEL              $NC"
+echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+sleep 2
+clear
+#install ohp
+#wget https://raw.githubusercontent.com/myridwan/src/ipuk/xolpanel.sh && chmod +x xolpanel.sh && ./xolpanel.sh
+clear
 cat> /root/.profile << END
 # ~/.profile: executed by Bourne-compatible login shells.
 
@@ -297,7 +258,6 @@ fi
 
 mesg n || true
 clear
-importantfile
 menu
 END
 chmod 644 /root/.profile
@@ -324,7 +284,7 @@ gg="AM"
 fi
 curl -sS ifconfig.me > /etc/myipvps
 echo " "
-echo "=====================-[ RIDWAN Premium ]-===================="
+echo "=====================-[ SCRIPT RIDWAN ]-===================="
 echo ""
 echo "------------------------------------------------------------"
 echo ""
@@ -335,7 +295,6 @@ echo "   - SSH Websocket           : 80 [OFF]" | tee -a log-install.txt
 echo "   - SSH SSL Websocket       : 443" | tee -a log-install.txt
 echo "   - Stunnel4                : 447, 777" | tee -a log-install.txt
 echo "   - Dropbear                : 109, 143" | tee -a log-install.txt
-echo "   - Squid Proxy             : 3128, 8080" | tee -a log-install.txt
 echo "   - Badvpn                  : 7100-7900" | tee -a log-install.txt
 echo "   - Nginx                   : 81" | tee -a log-install.txt
 echo "   - XRAY  Vmess TLS         : 443" | tee -a log-install.txt
@@ -344,14 +303,7 @@ echo "   - XRAY  Vless TLS         : 443" | tee -a log-install.txt
 echo "   - XRAY  Vless None TLS    : 80" | tee -a log-install.txt
 echo "   - Trojan GRPC                 : 443" | tee -a log-install.txt
 echo "   - Trojan WS               : 443" | tee -a log-install.txt
-echo "   - Wireguard               : 7070" | tee -a log-install.txt
-echo "   - SSTP VPN                : 444" | tee -a log-install.txt
-echo "   - L2TP/IPSEC VPN          : 1701" | tee -a log-install.txt
-echo "   - PPTP VPN                : 1732" | tee -a log-install.txt
 echo "   - Sodosok WS/GRPC           : 443" | tee -a log-install.txt
-echo "   - SS-OBFS TLS             : 2443-2543" | tee -a log-install.txt
-echo "   - SS-OBFS HTTP            : 3443-3543" | tee -a log-install.txt
-echo "   - Shadowsocks-R           : 1443-1543" | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "   >>> Server Information & Other Features"  | tee -a log-install.txt
 echo "   - Timezone                : Asia/Jakarta (GMT +7)"  | tee -a log-install.txt
@@ -378,20 +330,17 @@ echo "===============-[ Script Created By RIDWAN ]-==============="
 echo -e ""
 echo ""
 echo "" | tee -a log-install.txt
-systemctl restart ohp-ssh > /dev/null 2>&1
-systemctl restart ohp-db > /dev/null 2>&1
-systemctl restart ohp-opn > /dev/null 2>&1
 rm /root/cf.sh >/dev/null 2>&1
 rm /root/setup.sh >/dev/null 2>&1
-rm /usr/bin/port-vless >/dev/null 2>&1
+rm /root/insshws.sh 
 secs_to_human "$(($(date +%s) - ${start}))" | tee -a log-install.txt
 echo -e "
 "
-systemctl restart ssrmu > /dev/null 2>&1
-echo -ne "[ ${yell}WARNING${NC} ] Do you want to reboot now ? (y/n)? "
+echo -ne "[ ${yell}WARNING${NC} ] Silahkan Reboot Ulang Vps Anda ? (y/n)? "
 read answer
 if [ "$answer" == "${answer#[Yy]}" ] ;then
 exit 0
 else
 reboot
 fi
+
